@@ -93,9 +93,35 @@ class AppRouter extends RouterDelegate<AppLink>
     return true;
   }
 
-  // TODO: Convert app state to applink
+  // This is a helper function that converts the app state to an AppLink object.
+  AppLink getCurrentPath() {
+    // If the user hasn’t logged in, return the app link with the login path.
+    if (!appStateManager.isLoggedIn) {
+      return AppLink(location: AppLink.loginPath);
+      // If the user hasn’t completed onboarding, return the app link with the onboarding path.
+    } else if (!appStateManager.isOnboardingComplete) {
+      return AppLink(location: AppLink.onboardingPath);
+      // If the user taps the profile, return the app link with the profile path.
+    } else if (profileManager.didSelectUser) {
+      return AppLink(location: AppLink.profilePath);
+      // If the user taps the + button to create a new grocery item, return the app link with the item path.
+    } else if (groceryManager.isCreatingNewItem) {
+      return AppLink(location: AppLink.itemPath);
+      // If the user selected an existing item, return an app link with the item path and the item’s id.
+    } else if (groceryManager.selectedGroceryItem != null) {
+      final id = groceryManager.selectedGroceryItem?.id;
+      return AppLink(location: AppLink.itemPath, itemId: id);
+      // If none of the conditions are met, default by returning to the home path with the selected tab.
+    } else {
+      return AppLink(
+          location: AppLink.homePath,
+          currentTab: appStateManager.getSelectedTab);
+    }
+  }
 
-  // TODO: Apply configuration helper
+  // Accessing currentConfiguration calls the helper, getCurrentPath(), which checks the app state and returns the right app link configuration.
+  @override
+  AppLink get currentConfiguration => getCurrentPath();
 
   // Calls setNewRoutePath() when a new route is pushed. It passes along an AppLink. This is navigation configuration.
   @override
@@ -132,7 +158,3 @@ class AppRouter extends RouterDelegate<AppLink>
         break;
     }
   }
-
-  @override
-  Future<void> setNewRoutePath(configuration) async => null;
-}
