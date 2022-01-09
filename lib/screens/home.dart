@@ -65,16 +65,16 @@ class _HomeState extends State<Home> {
               Provider.of<AppStateManager>(context, listen: false)
                   .goToTab(index);
             },
-            items: <BottomNavigationBarItem>[
-              const BottomNavigationBarItem(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
                 icon: Icon(Icons.explore),
                 label: 'Explore',
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: Icon(Icons.book),
                 label: 'Recipes',
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: Icon(Icons.list),
                 label: 'To Buy',
               ),
