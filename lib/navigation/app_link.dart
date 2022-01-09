@@ -21,7 +21,26 @@ class AppLink {
     this.itemId,
   });
 
-// TODO: Add fromLocation
+  static AppLink fromLocation(String? location) {
+    // First, you need to decode the URL.
+    location = Uri.decodeFull(location ?? '');
+    // Parse the URI for query parameter keys and key-value pairs.
+    final uri = Uri.parse(location);
+    final params = uri.queryParameters;
+
+    // Extract the currentTab from the URL path if it exists.
+    final currentTab = int.tryParse(params[AppLink.tabParam] ?? '');
+    // Extract the itemId from the URL path if it exists.
+    final itemId = params[AppLink.idParam];
+    // Create the AppLink by passing in the query parameters extract from the URL string.
+    final link = AppLink(
+      location: uri.path,
+      currentTab: currentTab,
+      itemId: itemId,
+    );
+    // Return the instance of AppLink.
+    return link;
+  }
 
 // TODO: Add toLocation
 
