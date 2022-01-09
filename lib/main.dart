@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'fooderlich_theme.dart';
 import 'models/models.dart';
 import 'navigation/app_router.dart';
+import 'navigation/app_route_parser.dart';
 
 void main() {
   runApp(
@@ -23,7 +23,7 @@ class _FooderlichState extends State<Fooderlich> {
   final _profileManager = ProfileManager();
   final _appStateManager = AppStateManager();
   late AppRouter _appRouter;
-  // TODO: Initialize RouteInformationParser
+  final routeParser = AppRouteParser();
 
   @override
   void initState() {
@@ -55,14 +55,14 @@ class _FooderlichState extends State<Fooderlich> {
           } else {
             theme = FooderlichTheme.light();
           }
-          // TODO: Replace with Material.router
-          return MaterialApp(
+          return MaterialApp.router(
             theme: theme,
             title: 'Fooderlich',
-            home: Router(
-              routerDelegate: _appRouter,
-              backButtonDispatcher: RootBackButtonDispatcher(),
-            ),
+            backButtonDispatcher: RootBackButtonDispatcher(),
+            // The route information parser’s job is to convert the app state to and from a URL string.
+            routeInformationParser: routeParser,
+            // routerDelegate helps construct the stack of pages that represents your app state.
+            routerDelegate: _appRouter,
           );
         },
       ),
